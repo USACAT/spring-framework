@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/aop
+	   http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	   http://www.springframework.org/schema/util
+	   https://www.springframework.org/schema/util/spring-util.xsd">
+
+	<util:properties id="fruitProps" location="classpath:config.properties" />
+
+	<bean id="apple" class="com.spring.framework.debug.fruit.Apple">
+		<property name="pear" ref="pear"/>
+		<property name="num" value="#{fruitProps['apple.num']}"/>
+	</bean>
+
+	<bean id="pear" class="com.spring.framework.debug.fruit.Pear">
+		<property name="apple" ref="apple"/>
+	</bean>
+
+<!--	<bean id="fruitAop" class="com.spring.framework.debug.aop.FruitAspect"/>-->
+<!--	<aop:config>-->
+<!--		<aop:aspect ref="fruitAop">-->
+<!--			<aop:before method="beforeLog" pointcut="execution(* com.spring.framework.debug.fruit.*.*(..))"/>-->
+<!--			<aop:after method="afterLog" pointcut="execution(* com.spring.framework.debug.fruit.*.*(..))"/>-->
+<!--		</aop:aspect>-->
+<!--	</aop:config>-->
+
+</beans>
