@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * Parser for the @{@link ComponentScan} annotation.
- *
+ * @ {@ link ComponentScan}注释的解析器。
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -72,7 +72,7 @@ class ComponentScanAnnotationParser {
 		this.registry = registry;
 	}
 
-
+	// ComponentScan注解解析
 	public Set<BeanDefinitionHolder> parse(AnnotationAttributes componentScan, final String declaringClass) {
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,
 				componentScan.getBoolean("useDefaultFilters"), this.environment, this.resourceLoader);
@@ -120,6 +120,7 @@ class ComponentScanAnnotationParser {
 			basePackages.add(ClassUtils.getPackageName(clazz));
 		}
 		if (basePackages.isEmpty()) {
+			// 如果没有指定basePackages，使用传入declaringClass所在包路径。（例如springboot中启动类所在路径）
 			basePackages.add(ClassUtils.getPackageName(declaringClass));
 		}
 
@@ -129,6 +130,7 @@ class ComponentScanAnnotationParser {
 				return declaringClass.equals(className);
 			}
 		});
+		// 使用ClassPathBeanDefinitionScanner进行扫描
 		return scanner.doScan(StringUtils.toStringArray(basePackages));
 	}
 
