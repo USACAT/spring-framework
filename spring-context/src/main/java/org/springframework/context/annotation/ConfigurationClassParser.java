@@ -254,6 +254,7 @@ class ConfigurationClassParser {
 	 * Apply processing and build a complete {@link ConfigurationClass} by reading the
 	 * annotations, members and methods from the source class. This method can be called
 	 * multiple times as relevant sources are discovered.
+	 * 通过阅读源类中的注释，成员和方法，应用处理并构建完整的{@link ConfigurationClass}。发现相关来源后，可以多次调用此方法。
 	 * @param configClass the configuration class being build
 	 * @param sourceClass a source class
 	 * @return the superclass, or {@code null} if none found or previously processed
@@ -263,9 +264,11 @@ class ConfigurationClassParser {
 			throws IOException {
 
 		// Recursively process any member (nested) classes first
+		// 首先递归处理任何成员（嵌套）类
 		processMemberClasses(configClass, sourceClass);
 
 		// Process any @PropertySource annotations
+		// 处理任何@PropertySource批注
 		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), PropertySources.class,
 				org.springframework.context.annotation.PropertySource.class)) {
@@ -279,6 +282,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @ComponentScan annotations
+		// 处理任何@ComponentScan批注
 		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
 		if (!componentScans.isEmpty() &&
@@ -301,9 +305,11 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
+		// 处理任何@Import批注
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
 		// Process any @ImportResource annotations
+		// 处理任何@ImportResource批注
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
@@ -316,26 +322,31 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
+		// 处理单个@Bean方法
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
 		}
 
 		// Process default methods on interfaces
+		// 处理接口上的默认方法
 		processInterfaces(configClass, sourceClass);
 
 		// Process superclass, if any
+		//处理超类（如果有）
 		if (sourceClass.getMetadata().hasSuperClass()) {
 			String superclass = sourceClass.getMetadata().getSuperClassName();
 			if (superclass != null && !superclass.startsWith("java") &&
 					!this.knownSuperclasses.containsKey(superclass)) {
 				this.knownSuperclasses.put(superclass, configClass);
 				// Superclass found, return its annotation metadata and recurse
+				// 找到超类，返回其注释元数据并递归
 				return sourceClass.getSuperClass();
 			}
 		}
 
 		// No superclass -> processing is complete
+		// 没有超类->处理完成
 		return null;
 	}
 
